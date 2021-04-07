@@ -1,0 +1,38 @@
+Credenciales de acceso
+domain :livinchmanager.com
+host:livinchmanager.com
+contraseña root : Livinch2020_3
+
+IP SSH: 93.188.167.83
+Puerto SSh: 22
+Usuario SSH: root
+IPV6: 2a02:4780:1:1::1:836e 
+
+Upload a site to ngnix 
+
+
+paso 1 : crear configuracion ngix
+
+nano /etc/nginx/sites-available/example.com
+
+paso 2 archivo configuracion
+
+server {
+
+    location / {
+        proxy_pass http://localhost:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
+
+}
+
+paso 3: asegurarse de que no hayan fallas
+sudo nginx -t
+
+paso 4 :reiniciar el servidor
+sudo systemctl restart nginx
+
