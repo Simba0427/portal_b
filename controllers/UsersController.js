@@ -98,6 +98,25 @@ module.exports = {
         let result = await Users.resetPassword(param);
         res.json(result);
     },
+    recoverPassword: async (req = request, res = response) => {
+        let params = {
+            email: req.body.email,
+            newPwd: sha256.sha256(req.body.newPwd),
+        };
+        let result = await Users.recoverPassword(params);
+        if(result)
+        {
+            var mail = {
+                from: "frank@localworks.us",
+                to: params.email,
+                subject: `Your password initialized.`,
+                message: "New password is " + params.newPwd
+            };
+            //console.log("mail", mail);
+            sendEmail(mail);
+        }
+        res.json(result);
+    },
     deleteUser: async (req = request, res = response) => {
         let result = await Users.deleteUser(req.body.user_id);
         res.json(result);

@@ -78,6 +78,29 @@ module.exports = {
             return {state: false, msg: "incorrect your old password."};
         }
     },
+    recoverPassword:async(userObj) => {
+        let user = await connection.table("users")
+        .where("email", userObj.email)
+        .select("*")
+        .first();
+
+        let updatedUserObj = {
+            user_id: user.user_id,
+            first_name: user.first_name,
+            last_name: user.last_name,
+            email: user.email,
+            password: userObj.newPwd,
+            user_role: user.user_role,
+            phone: user.phone,
+            created_at: user.created_at
+        }
+        let result = await connection.table("users").where("email", userObj.email).update(updatedUserObj);
+        if (result) {
+            return {state: true, msg: "success updated"};
+        } else {
+            return {state: false, msg: "incorrect your old password."};
+        }
+    },
     deleteUser:(id) => {
         return connection.table("users").where("user_id", id).delete();
     },
